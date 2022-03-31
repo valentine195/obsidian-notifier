@@ -22,13 +22,14 @@ esbuild
         },
         entryPoints: ["src/main.ts", "src/styles.css"],
         bundle: true,
-        external: ["obsidian", "electron", ...builtins],
+        external: ["obsidian", "electron", "@electron/remote", ...builtins],
         format: "cjs",
         watch: !prod,
         target: "es2020",
         logLevel: "info",
         sourcemap: prod ? false : "inline",
         treeShaking: true,
-        outdir: dir
+        outdir: dir,
+        loader: { ".png": "dataurl" }
     })
     .catch(() => process.exit(1));

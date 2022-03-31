@@ -1,5 +1,5 @@
 {
-    "name": "plugin-template",
+    "name": "obsidian-notifier",
     "version": "0.0.0",
     "description": "",
     "main": "main.js",
@@ -12,16 +12,18 @@
     },
     "standard-version": {
         "t": "",
-        "releaseCommitMessageFormat": "<plugin-template> Release: v{{currentTag}}"
+        "releaseCommitMessageFormat": "Obsidian Notifier Release: v{{currentTag}}"
     },
     "keywords": [],
     "author": "",
     "license": "MIT",
     "devDependencies": {
+        "@electron/remote": "^2.0.8",
         "@types/node": "^14.17.21",
         "builtin-modules": "^3.2.0",
         "dotenv": "^10.0.0",
         "esbuild": "^0.14.2",
+        "monkey-around": "^2.3.0",
         "obsidian": "latest",
         "standard-version": "^9.3.2",
         "tslib": "^2.3.0",

@@ -1,6 +1,6 @@
 {
-    "id": "plugin-template",
-    "name": "",
+    "id": "obsidian-notifier",
+    "name": "Obsidian Notifier",
     "version": "0.0.0",
     "minAppVersion": "",
     "author": "Jeremy Valentine",
