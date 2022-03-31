@@ -1,0 +1,30 @@
+{
+    "name": "plugin-template",
+    "version": "0.0.0",
+    "description": "",
+    "main": "main.js",
+    "scripts": {
+        "dev": "node esbuild.config.mjs",
+        "build": "node esbuild.config.mjs production",
+        "test": "jest",
+        "release": "standard-version",
+        "push": "git push --follow-tags origin"
+    },
+    "standard-version": {
+        "t": "",
+        "releaseCommitMessageFormat": "<plugin-template> Release: v{{currentTag}}"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/node": "^14.17.21",
+        "builtin-modules": "^3.2.0",
+        "dotenv": "^10.0.0",
+        "esbuild": "^0.14.2",
+        "obsidian": "latest",
+        "standard-version": "^9.3.2",
+        "tslib": "^2.3.0",
+        "typescript": "^4.2.4"
+    }
+}
