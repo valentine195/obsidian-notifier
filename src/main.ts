@@ -4,7 +4,8 @@ import { Plugin, PluginSettingTab, Setting } from "obsidian";
 import { NotifierSettings } from "./@types";
 
 const DEFAULT_SETTINGS: NotifierSettings = {
-    always: false
+    always: false,
+    hide: true
 };
 
 import icon from "../assets/obsidian.png";
@@ -27,7 +28,7 @@ export default class Notifier extends Plugin {
                         if (!node.hasClass("notice-container")) continue;
                         if (this.settings.always || !browser.isFocused()) {
                             this.displayNotification(node.innerText);
-                            node.detach();
+                            if (this.settings.hide) node.detach();
                         }
                     }
                 }
@@ -94,6 +95,16 @@ class NotifierSettingsTab extends PluginSettingTab {
                     this.plugin.settings.always = v;
                     this.plugin.saveSettings();
                 })
+            );
+        new Setting(this.containerEl.createDiv())
+            .setName("Hide original notification")
+            .setDesc("The plugin will hide the original Obsidian notification.")
+            .addToggle((t) =>
+                t.setValue(this.plugin.settings.hide).onChange((v) => {
+                    this.plugin.settings.hide = v;
+                    this.plugin.saveSettings();
+                })
+                
             );
     }
 }
