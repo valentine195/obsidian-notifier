@@ -1,10 +1,10 @@
 import "./main.css";
 
-import { Notice, Plugin, PluginSettingTab, Setting } from "obsidian";
+import { Plugin, PluginSettingTab, Setting } from "obsidian";
 import { NotifierSettings } from "./@types";
 
 const DEFAULT_SETTINGS: NotifierSettings = {
-    always: true
+    always: false
 };
 
 import icon from "../assets/obsidian.png";
@@ -13,12 +13,12 @@ export default class Notifier extends Plugin {
     settings: NotifierSettings;
     observer: MutationObserver;
     async onload() {
+        await this.loadSettings();
         this.app.workspace.onLayoutReady(async () => {
-            await this.loadSettings();
             this.addSettingTab(new NotifierSettingsTab(this));
             const browser = require("@electron/remote").getCurrentWindow();
-
             this.observer = new MutationObserver((mutations) => {
+                if (!this.settings.always && browser.isFocused()) return;
                 for (const mutation of mutations) {
                     if (!mutation.addedNodes || !mutation.addedNodes.length)
                         continue;
