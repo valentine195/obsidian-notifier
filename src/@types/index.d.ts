@@ -1,1 +1,3 @@
-export interface PluginSettings {}
+export interface NotifierSettings {
+    always: boolean;
+}

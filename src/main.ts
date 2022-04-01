@@ -1,57 +1,68 @@
 import "./main.css";
 
-import { Notice, Plugin } from "obsidian";
-import { PluginSettings } from "./@types";
+import { Notice, Plugin, PluginSettingTab, Setting } from "obsidian";
+import { NotifierSettings } from "./@types";
 
-import { around } from "monkey-around";
-
-const DEFAULT_SETTINGS: PluginSettings = {};
+const DEFAULT_SETTINGS: NotifierSettings = {
+    always: true
+};
 
 import icon from "../assets/obsidian.png";
 
-export default class MyPlugin extends Plugin {
-    settings: PluginSettings;
+export default class Notifier extends Plugin {
+    settings: NotifierSettings;
+    observer: MutationObserver;
     async onload() {
-        await this.loadSettings();
+        this.app.workspace.onLayoutReady(async () => {
+            await this.loadSettings();
+            this.addSettingTab(new NotifierSettingsTab(this));
+            const browser = require("@electron/remote").getCurrentWindow();
 
-        const browser = require("@electron/remote").getCurrentWindow();
-
-        const self = this;
-        this.register(
-            around(Notice.prototype, {
-                hide: function (old) {
-                    return function () {
-                        if (!browser.isFocused()) {
-                            if (Notification.permission == "granted") {
-                                self.buildNotification(this.noticeEl.innerText);
-                            } else if (Notification.permission != "denied") {
-                                Notification.requestPermission().then(
-                                    (perm) => {
-                                        if (perm == "granted") {
-                                            self.buildNotification(
-                                                this.noticeEl.innerText
-                                            );
-                                        }
-                                    }
-                                );
-                            }
+            this.observer = new MutationObserver((mutations) => {
+                for (const mutation of mutations) {
+                    if (!mutation.addedNodes || !mutation.addedNodes.length)
+                        continue;
+                    for (const node of Array.from(mutation.addedNodes)) {
+                        if (!(node instanceof HTMLDivElement)) continue;
+                        if (!node.hasClass("notice-container")) continue;
+                        if (this.settings.always || !browser.isFocused()) {
+                            this.displayNotification(node.innerText);
+                            node.detach();
                         }
-
-                        return old.call(this);
-                    };
+                    }
                 }
-            })
-        );
-    }
+            });
 
+            this.observer.observe(document.body, {
+                childList: true,
+                attributes: false,
+                subtree: false
+            });
+        });
+    }
+    displayNotification(message: string) {
+        if (Notification.permission == "granted") {
+            this.buildNotification(message);
+        } else if (Notification.permission != "denied") {
+            Notification.requestPermission().then((perm) => {
+                if (perm == "granted") {
+                    this.buildNotification(message);
+                }
+            });
+        }
+    }
     buildNotification(message: string) {
         new Notification("Obsidian", {
             icon: icon,
+            badge: icon,
             body: message
         });
     }
 
-    onunload() {}
+    onunload() {
+        this.observer.disconnect();
+        this.observer = null;
+    }
 
     async loadSettings() {
         this.settings = Object.assign(
@@ -63,5 +74,26 @@ export default class MyPlugin extends Plugin {
 
     async saveSettings() {
         await this.saveData(this.settings);
+    }
+}
+
+class NotifierSettingsTab extends PluginSettingTab {
+    constructor(public plugin: Notifier) {
+        super(plugin.app, plugin);
+    }
+    display() {
+        this.containerEl.empty();
+        this.containerEl.createEl("h3", { text: "Obsidian Notifier" });
+        new Setting(this.containerEl.createDiv())
+            .setName("Always display system notifications")
+            .setDesc(
+                "The plugin will always show system notifications, even if Obsidian is focused."
+            )
+            .addToggle((t) =>
+                t.setValue(this.plugin.settings.always).onChange((v) => {
+                    this.plugin.settings.always = v;
+                    this.plugin.saveSettings();
+                })
+            );
     }
 }
