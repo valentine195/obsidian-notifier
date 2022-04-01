@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4](https://github.com/valentine195/obsidian-notifier/compare/0.0.3...0.0.4) (2022-04-01)
+
+
+### Features
+
+* Adds option to hide original notification ([4814862](https://github.com/valentine195/obsidian-notifier/commit/4814862223e38d445218ffe9c4c24244f90f629f))
+
 ### [0.0.3](https://github.com/valentine195/obsidian-notifier/compare/0.0.2...0.0.3) (2022-04-01)
 
 
