@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3](https://github.com/valentine195/obsidian-notifier/compare/0.0.2...0.0.3) (2022-04-01)
+
+
+### Features
+
+* Reworked plugin to support always displaying notifications ([46d9e9d](https://github.com/valentine195/obsidian-notifier/commit/46d9e9d4cd44556c4439b5d121ddea8e1ed8d6e4))
+
+
+### Bug Fixes
+
+* Fixes loading of settings ([b3f1a07](https://github.com/valentine195/obsidian-notifier/commit/b3f1a072080e31b9fc8719666d0a1ae8db077092))
+
 ### [0.0.2](https://github.com/valentine195/obsidian-notifier/compare/0.0.1...0.0.2) (2022-03-31)
 
 
